@@ -31,9 +31,9 @@ router.get('/detail/:id', productsController.detail);
 
 /*** EDIT ONE PRODUCT ***/
 router.get('/edit/:id/', productsController.edit);
-router.post('/edit/:id', productsController.update);
+router.put('/edit/:id', upload.single('image'), productsController.update);
 
 /*** DELETE ONE PRODUCT***/
-router.post('/delete/:id', productsController.destroy);
+router.delete('/delete/:id', productsController.destroy);
 
 module.exports = router;

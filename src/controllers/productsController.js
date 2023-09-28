@@ -21,7 +21,6 @@ const controller = {
     const product = products.find((item) => item.id == id);
     res.render('detail', { product, toThousand });
   },
-
   // Create - Form to create
   create: (req, res) => {
     // Do the magic
@@ -66,13 +65,38 @@ const controller = {
   // Update - Method to update
   update: (req, res) => {
     // Do the magic
-    res.send('Producto modificado');
+    req.body.id = req.params.id;
+    req.body.image = req.file ? req.file.filename : req.body.oldImage;
+
+    let productEdit = products.map((item) => {
+      if (item.id == req.body.id) {
+        return (item = req.body);
+      }
+      return item;
+    });
+
+    let productUpdate = JSON.stringify(productEdit, null, 2);
+    fs.writeFileSync(
+      path.join(__dirname, '../data/productsDataBase.json'),
+      productUpdate
+    );
+    res.redirect('/products');
   },
 
   // Delete - Delete one product from DB
   destroy: (req, res) => {
     // Do the magic
-    res.send('Producto Borradox');
+    let productDelete = products.filter(
+      (product) => product.id != req.params.id
+    );
+
+    let productDestroy = JSON.stringify(productDelete, null, 2);
+    fs.writeFileSync(
+      productDestroy,
+      path.join(__dirname, '../data/productsDataBase.json')
+    );
+
+    res.redirect('/products');
   },
 };
 
